@@ -20,4 +20,4 @@ client.on('message', function(message) {
     }
 })
 
-client.login('NzQxODYzNzA4MDExMjY2MDY5.Xy9waw.0sX_pC20d09dIXyZyB77P9-v3MI')
+client.login(process.env.token)
