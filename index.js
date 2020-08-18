@@ -161,7 +161,7 @@ client.on('message', async(message) => {
             message.reply("thats toooo little times")
         } else {
             let roles = []
-            for(let spam = 0; spam < numberTT; spam++) {
+            for(let spam = 0; spam < times; spam++) {
                 roles.push('GG\n')
             }
             message.channel.send(roles)
