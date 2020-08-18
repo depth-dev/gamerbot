@@ -43,7 +43,8 @@ client.on('message', async(message) => {
          .addField('**gb!dog**', 'Image of a dog!', true)
          .addField('**gb!mc**', 'Minecraft skin for a user!', true)
          .addField('**gb!howrichisgabriel**', 'How rich is he?', true)
-         .addField('**gb!stalkgabriel**', 'Find gabriel!')
+         .addField('**gb!stalkgabriel**', 'Find gabriel!', true)
+         .addField('**gb!gg**', 'GG!', true)
          .setFooter('Gamer')
          .setTimestamp()
         await message.channel.send({embed:gabboHelp})
@@ -149,6 +150,32 @@ client.on('message', async(message) => {
               stalkedRecently.delete(message.author.id);
             }, 30000);
 }
+
+    if(command === "gg") {
+        const times = args[0]
+        if(!times) {
+            message.reply("GG! You didn't supply an amount that you wanted me to say GG! Grammer!")
+        } else if(times > 20) {
+            message.reply("that's toooooo many times")
+        } else if(times < 1) {
+            message.reply("thats toooo little times")
+        } else {
+        for(let spam = 0; spam < times; spam++) {
+            setTimeout(() => { message.channel.send("GG") }, 1000)
+        }
+    }
+}
+
+    if(command === "shutdown") {
+        if(message.author.id != "315173627232518147") {
+            message.channel.send({embed:noPermsBad})
+        } else {
+            message.channel.send('f in the chat for fallen gamer')
+            setTimeout(() => {
+                client.destroy()
+            }, 2000)
+        }
+    }
 }
 })
 
