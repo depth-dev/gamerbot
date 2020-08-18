@@ -2,6 +2,8 @@ const Discord = require('discord.js')
 const config = require('./config.json')
 const client = new Discord.Client()
 const prefix = config.prefix
+const stalkedRecently = new Set()
+const richedRecently = new Set()
 const fetch = require('node-fetch')
 const noPermsBad = new Discord.MessageEmbed()
  .setColor('03fcd3')
@@ -10,7 +12,12 @@ const noPermsBad = new Discord.MessageEmbed()
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`)
-    client.user.setActivity('games', { type:'PLAYING' })
+    function statusThing() {
+    const statuses = ['games', 'with the Bank', 'with mysmelf', 'Terraria']
+    const theStatus = Math.floor(Math.random()*statuses.length)
+    client.user.setActivity(statuses[theStatus], { type:"PLAYING" })
+    }
+    setInterval(statusThing, 20000)
 })
 client.on('message', async(message) => {
     if(message.author.bot || !message.content.startsWith(prefix)) return;
@@ -82,6 +89,9 @@ client.on('message', async(message) => {
     }
 
     if(command === "howrichisgabriel") {
+        if(richedRecently.has(message.author.id)) {
+            message.reply(':ice_cube: Chill out man! You\'re on cooldown for 20 seconds!');
+    } else {
         try {
             const obj = await fetch('https://api.hypixel.net/skyblock/profiles?uuid=796aebd45af94fb5a1447b0ff95bc2af&key=41a82fa1-b52f-41d5-8eb3-87d03e2a3ec7').then(x => x.json())
             const otherObj = await fetch('https://sky.lea.moe/api/v2/profile/gabrielz1').then(x => x.json())
@@ -100,8 +110,16 @@ client.on('message', async(message) => {
             message.reply('Something went wrong! Please try again later.')
         }
     }
+    richedRecently.add(message.author.id);
+            setTimeout(() => {
+              richedRecently.delete(message.author.id);
+            }, 20000);
+    }
 
     if(command === "stalkgabriel") {
+        if(stalkedRecently.has(message.author.id)) {
+            message.reply(':ice_cube: Chill out! You\'re on coolodown for 30 seconds! Let him move, man!')
+        } else {
         try {
         const otherObj = await fetch('https://sky.lea.moe/api/v2/profile/gabrielz1').then(x => x.json())
         const location = otherObj.profiles["c531ad68a12a428e9593a4f65b3b3b83"].data.current_area
@@ -126,6 +144,11 @@ client.on('message', async(message) => {
     }) 
 }
     }
+    stalkedRecently.add(message.author.id);
+            setTimeout(() => {
+              stalkedRecently.delete(message.author.id);
+            }, 30000);
+}
 }
 })
 
