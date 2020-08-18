@@ -4,6 +4,7 @@ const client = new Discord.Client()
 const prefix = config.prefix
 const stalkedRecently = new Set()
 const richedRecently = new Set()
+const ggCool = new Set()
 const fetch = require('node-fetch')
 const noPermsBad = new Discord.MessageEmbed()
  .setColor('03fcd3')
@@ -152,6 +153,9 @@ client.on('message', async(message) => {
 }
 
     if(command === "gg") {
+        if(ggCool.has(message.author.id)) {
+            message.reply('LMFAO you can\'t use this for 20 secodns')
+        } else {
         const times = args[0]
         if(!times) {
             message.reply("GG! You didn't supply an amount that you wanted me to say GG! Grammer!")
@@ -165,6 +169,10 @@ client.on('message', async(message) => {
                 roles.push('GG')
             }
             message.channel.send(roles)
+        } ggCool.add(message.author.id)
+        setTimeout(() => {
+            ggCool.delete(message.author.id)
+        }, 20000)
     }
 }
 
