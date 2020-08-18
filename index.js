@@ -162,7 +162,7 @@ client.on('message', async(message) => {
         } else {
             let roles = []
             for(let spam = 0; spam < times; spam++) {
-                roles.push('GG\n')
+                roles.push('GG')
             }
             message.channel.send(roles)
     }
