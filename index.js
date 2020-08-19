@@ -46,6 +46,7 @@ client.on('message', async(message) => {
          .addField('**gb!howrichisgabriel**', 'How rich is he?', true)
          .addField('**gb!stalkgabriel**', 'Find gabriel!', true)
          .addField('**gb!gg**', 'GG!', true)
+         .addField('**gb!howscrewedistheus**', 'How screwed is the US jesus christ', true)
          .setFooter('Gamer')
          .setTimestamp()
         await message.channel.send({embed:gabboHelp})
@@ -184,6 +185,23 @@ client.on('message', async(message) => {
             setTimeout(() => {
                 client.destroy()
             }, 2000)
+        }
+    }
+
+    if(command === "howscrewedistheus") {
+        try {
+        const obj = await fetch('https://api.covidtracking.com/v1/us/current.json').then(x => x.json())
+        const cases = obj[0]
+        const screwedEmbed = new Discord.MessageEmbed()
+         .setColor('03fcd3')
+         .setTitle('The US is So Screwed Man')
+         .setThumbnail('https://upload.wikimedia.org/wikipedia/en/thumb/a/a4/Flag_of_the_United_States.svg/1200px-Flag_of_the_United_States.svg.png')
+         .setDescription(`The US has a total of ${cases.positive} confirmed Corona-Cases! Ruh roh!`)
+         .setTimestamp()
+         .setFooter('Gamer')
+        message.channel.send({embed:screwedEmbed})
+        } catch (err) {
+            message.reply('Something went wrong!')
         }
     }
 }
