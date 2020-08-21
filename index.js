@@ -2,6 +2,7 @@ const Discord = require('discord.js')
 const config = require('./config.json')
 const client = new Discord.Client()
 const prefix = config.prefix
+const axios = require('axios')
 const stalkedRecently = new Set()
 const richedRecently = new Set()
 const ggCool = new Set()
@@ -54,6 +55,7 @@ client.on('message', async(message) => {
          .addField('**gb!gg**', 'GG!', true)
          .addField('**gb!howscrewedistheus**', 'How screwed is the US jesus christ', true)
          .addField('**gb!shibe**', 'Shiba inu!', true)
+         .addField('**gb!links**', 'Social Media on Hypixel', true)
          .setFooter('Gamer')
          .setTimestamp()
         await message.channel.send({embed:gabboHelp})
@@ -263,6 +265,44 @@ client.on('message', async(message) => {
         message.channel.send({embed:shibaEmbed})
         } catch (err) {
             message.reply('Aww! something went wrong. oof')
+        }
+    }
+
+    if(command === "links") {
+        const userName = args[0]
+        if(!userName) return message.reply('Please supply a username!')
+        try {
+        const response = await axios(`https://api.hypixel.net/player?key=${config.apikey}&name=${userName}`)
+        const data = response.data 
+
+        if (!data.success || !data.player) return message.channel.send('Player does not exist.');
+
+        const mojangAPI = await axios(`https://api.mojang.com/users/profiles/minecraft/${userName}`)
+        const idData = mojangAPI.data
+
+        const uuid = idData.id
+
+        const player = data.player 
+        let discordVal
+        let youVal
+        let twiVal
+        const discord = player.socialMedia.links.DISCORD
+        const youtube = player.socialMedia.links.YOUTUBE
+        const twitch = player.socialMedia.links.TWITCH
+        if(!discord) { discordVal = "Not Linked"} else { discordVal = discord }
+        if(!youtube) { youVal = "Not Linked"} else { youVal = youtube }
+        if(!twitch) { twiVal = "Not Linked"} else { twiVal = twitch }
+
+        const linkEmbed = new Discord.MessageEmbed()
+         .setColor('03fcd3')
+         .setTitle(`${userName}'s Hypixel Links`)
+         .setThumbnail(`https://crafatar.com/renders/body/${uuid}?overlay`)
+         .setDescription(`Youtube: ${youVal}\n Discord: ${discordVal}\n Twitch: ${twiVal}`)
+         .setFooter('Gamer')
+         .setTimestamp()
+        message.channel.send({embed:linkEmbed})
+        } catch (err) {
+            message.reply('Something went wrong!')
         }
     }
 }
